@@ -333,8 +333,7 @@ function PartBox({ id, color, side }: { id: string; color: string; side: string 
 
 function Section({ item }: { item: typeof sections[0] }) {
   const isLeft = item.side === "left"
-  const orderPart = isLeft ? "order-1 self-stretch" : "order-1 lg:order-2 self-stretch"
-  const orderText = isLeft ? "order-2" : "order-2 lg:order-1"
+  const orderText = isLeft ? "lg:order-1" : "lg:order-2"
 
   const glowPos = isLeft ? "left-1/3" : "right-1/3"
 
@@ -350,25 +349,12 @@ function Section({ item }: { item: typeof sections[0] }) {
 
       <div className="relative z-10 h-full flex items-center px-4 sm:px-8 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 w-full h-full items-center">
-          {/* Part side */}
-          <motion.div
-            initial={{ x: isLeft ? -400 : 400 }}
-            whileInView={{ x: 0 }}
-            viewport={{ once: false, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className={orderPart}
-          >
-            <PartViewer slug={item.id}>
-              <PartBox id={item.id} color={item.color} side={item.side} />
-            </PartViewer>
-          </motion.div>
-
-          {/* Text side */}
+          {/* Text side - full width on mobile, side by side on desktop */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-80px" }}
-            transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className={orderText}
           >
             <div
@@ -401,6 +387,19 @@ function Section({ item }: { item: typeof sections[0] }) {
                 <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
+          </motion.div>
+
+          {/* Part side - hidden on mobile, visible on desktop */}
+          <motion.div
+            initial={{ x: isLeft ? -400 : 400 }}
+            whileInView={{ x: 0 }}
+            viewport={{ once: false, margin: "-100px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="hidden lg:flex self-stretch"
+          >
+            <PartViewer slug={item.id}>
+              <PartBox id={item.id} color={item.color} side={item.side} />
+            </PartViewer>
           </motion.div>
         </div>
       </div>
