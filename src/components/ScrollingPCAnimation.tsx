@@ -333,12 +333,13 @@ function PartBox({ id, color, side }: { id: string; color: string; side: string 
 
 function Section({ item }: { item: typeof sections[0] }) {
   const isLeft = item.side === "left"
-  const orderText = isLeft ? "lg:order-1" : "lg:order-2"
+  const orderText = isLeft ? "order-1 lg:order-1" : "order-1 lg:order-2"
+  const orderPart = isLeft ? "order-2 lg:order-2" : "order-2 lg:order-1"
 
   const glowPos = isLeft ? "left-1/3" : "right-1/3"
 
   return (
-    <section className="relative h-screen bg-black overflow-hidden">
+    <section className="relative h-screen bg-black overflow-y-auto lg:overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -348,17 +349,17 @@ function Section({ item }: { item: typeof sections[0] }) {
       </div>
 
       <div className="relative z-10 h-full flex items-center px-4 sm:px-8 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 w-full h-full items-center">
-          {/* Text side - full width on mobile, side by side on desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 w-full h-full items-start lg:items-center">
+          {/* Text side - always first on mobile */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-80px" }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className={orderText}
+            className={`${orderText} pt-12 lg:pt-0`}
           >
             <div
-              className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium mb-4 w-fit border"
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium mb-3 w-fit border"
               style={{
                 backgroundColor: `${item.color}15`,
                 color: item.color,
@@ -368,15 +369,15 @@ function Section({ item }: { item: typeof sections[0] }) {
               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: item.color, boxShadow: `0 0 6px ${item.color}` }} />
               {item.tag}
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 lg:mb-4 leading-tight">
               {item.title}
             </h2>
-            <p className="text-base sm:text-lg text-gray-400 mb-8 leading-relaxed max-w-md">
+            <p className="text-sm sm:text-lg text-gray-400 mb-5 lg:mb-8 leading-relaxed max-w-md">
               {item.desc}
             </p>
             <Link
               href={item.href}
-              className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold text-white transition-all w-fit hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl px-5 py-3 lg:px-6 lg:py-3.5 text-sm font-semibold text-white transition-all w-fit hover:scale-[1.02] active:scale-[0.98]"
               style={{
                 backgroundColor: item.color,
                 boxShadow: `0 4px 20px ${item.color}40`,
@@ -389,13 +390,13 @@ function Section({ item }: { item: typeof sections[0] }) {
             </Link>
           </motion.div>
 
-          {/* Part side - hidden on mobile, visible on desktop */}
+          {/* Part side - always second on mobile */}
           <motion.div
             initial={{ x: isLeft ? -400 : 400 }}
             whileInView={{ x: 0 }}
             viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.7, ease: "easeOut" }}
-            className="hidden lg:flex self-stretch"
+            className={`${orderPart} self-stretch pb-8 lg:pb-0`}
           >
             <PartViewer slug={item.id}>
               <PartBox id={item.id} color={item.color} side={item.side} />
