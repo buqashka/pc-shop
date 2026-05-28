@@ -333,8 +333,8 @@ function PartBox({ id, color, side }: { id: string; color: string; side: string 
 
 function Section({ item }: { item: typeof sections[0] }) {
   const isLeft = item.side === "left"
-  const orderText = isLeft ? "order-1 lg:order-2" : "order-1 lg:order-1"
-  const orderPart = isLeft ? "order-2 lg:order-1" : "order-2 lg:order-2"
+  const orderPart = isLeft ? "order-1 self-stretch" : "order-1 lg:order-2 self-stretch"
+  const orderText = isLeft ? "order-2" : "order-2 lg:order-1"
 
   const glowPos = isLeft ? "left-1/3" : "right-1/3"
 
@@ -343,23 +343,36 @@ function Section({ item }: { item: typeof sections[0] }) {
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className={`absolute top-1/2 ${glowPos} -translate-y-1/2 w-[300px] sm:w-[500px] lg:w-[700px] h-[300px] sm:h-[500px] lg:h-[700px] rounded-full blur-[80px] sm:blur-[100px] opacity-25`}
+          className={`absolute top-1/2 ${glowPos} -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[100px] opacity-25`}
           style={{ backgroundColor: item.color }}
         />
       </div>
 
       <div className="relative z-10 h-full flex items-center px-4 sm:px-8 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-8 w-full h-full items-center">
-          {/* Text side - always first on mobile */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 w-full h-full items-center">
+          {/* Part side */}
+          <motion.div
+            initial={{ x: isLeft ? -600 : 600 }}
+            whileInView={{ x: 0 }}
+            viewport={{ once: false, margin: "-100px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className={orderPart}
+          >
+            <PartViewer slug={item.id}>
+              <PartBox id={item.id} color={item.color} side={item.side} />
+            </PartViewer>
+          </motion.div>
+
+          {/* Text side */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-80px" }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className={`${orderText} pt-8 lg:pt-0`}
+            transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
+            className={orderText}
           >
             <div
-              className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium mb-2 lg:mb-4 w-fit border"
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium mb-4 w-fit border"
               style={{
                 backgroundColor: `${item.color}15`,
                 color: item.color,
@@ -369,38 +382,25 @@ function Section({ item }: { item: typeof sections[0] }) {
               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: item.color, boxShadow: `0 0 6px ${item.color}` }} />
               {item.tag}
             </div>
-            <h2 className="text-xl sm:text-4xl lg:text-5xl font-bold text-white mb-1 lg:mb-4 leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
               {item.title}
             </h2>
-            <p className="text-xs sm:text-lg text-gray-400 mb-3 lg:mb-8 leading-relaxed max-w-md">
+            <p className="text-base sm:text-lg text-gray-400 mb-8 leading-relaxed max-w-md">
               {item.desc}
             </p>
             <Link
               href={item.href}
-              className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 lg:px-6 lg:py-3.5 text-xs lg:text-sm font-semibold text-white transition-all w-fit hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold text-white transition-all w-fit hover:scale-[1.02] active:scale-[0.98]"
               style={{
                 backgroundColor: item.color,
                 boxShadow: `0 4px 20px ${item.color}40`,
               }}
             >
               {item.btn}
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="lg:w-4 lg:h-4">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
-          </motion.div>
-
-          {/* Part side - always second on mobile */}
-          <motion.div
-            initial={{ x: isLeft ? -400 : 400 }}
-            whileInView={{ x: 0 }}
-            viewport={{ once: false, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className={`${orderPart} self-stretch`}
-          >
-            <PartViewer slug={item.id}>
-              <PartBox id={item.id} color={item.color} side={item.side} />
-            </PartViewer>
           </motion.div>
         </div>
       </div>
