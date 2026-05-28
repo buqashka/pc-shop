@@ -339,11 +339,11 @@ function Section({ item }: { item: typeof sections[0] }) {
   const glowPos = isLeft ? "left-1/3" : "right-1/3"
 
   return (
-    <section className="relative h-screen bg-black">
+    <section className="relative min-h-screen bg-black">
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div
-          className={`absolute top-1/2 ${glowPos} -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[100px] opacity-25`}
+          className={`absolute top-1/2 ${glowPos} -translate-y-1/2 w-[300px] sm:w-[500px] lg:w-[700px] h-[300px] sm:h-[500px] lg:h-[700px] rounded-full blur-[80px] sm:blur-[100px] opacity-25`}
           style={{ backgroundColor: item.color }}
         />
       </div>
@@ -352,7 +352,7 @@ function Section({ item }: { item: typeof sections[0] }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 w-full h-full items-center">
           {/* Part side */}
           <motion.div
-            initial={{ x: isLeft ? -600 : 600 }}
+            initial={{ x: isLeft ? -250 : 250 }}
             whileInView={{ x: 0 }}
             viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.7, ease: "easeOut" }}

@@ -14,7 +14,7 @@
 
 @layer base {
   body {
-    @apply bg-black text-gray-100 antialiased;
+    @apply bg-black text-gray-100 antialiased overflow-x-hidden;
   }
 }
 
