@@ -3,18 +3,6 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import PartViewer from "./PartViewer"
-import { useState, useEffect } from "react"
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false)
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 1024)
-    check()
-    window.addEventListener("resize", check)
-    return () => window.removeEventListener("resize", check)
-  }, [])
-  return isMobile
-}
 
 const sections = [
   {
@@ -345,15 +333,13 @@ function PartBox({ id, color, side }: { id: string; color: string; side: string 
 
 function Section({ item }: { item: typeof sections[0] }) {
   const isLeft = item.side === "left"
-  const isMobile = useIsMobile()
   const orderPart = isLeft ? "order-1 self-stretch" : "order-1 lg:order-2 self-stretch"
   const orderText = isLeft ? "order-2" : "order-2 lg:order-1"
-  const offset = isMobile ? 250 : 600
 
   const glowPos = isLeft ? "left-1/3" : "right-1/3"
 
   return (
-    <section className="relative min-h-screen bg-black">
+    <section className="relative h-screen bg-black overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -366,7 +352,7 @@ function Section({ item }: { item: typeof sections[0] }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 w-full h-full items-center">
           {/* Part side */}
           <motion.div
-            initial={{ x: isLeft ? -offset : offset }}
+            initial={{ x: isLeft ? -400 : 400 }}
             whileInView={{ x: 0 }}
             viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.7, ease: "easeOut" }}
