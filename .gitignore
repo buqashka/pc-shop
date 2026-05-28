@@ -8,3 +8,7 @@ dist/
 build/
 .turbo/
 *.log
+*.docx
+~$*.docx
+make_doc.py
+er_diagram.html
