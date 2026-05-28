@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
+export const dynamic = "force-dynamic"
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const all = searchParams.get("all")
@@ -52,3 +54,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Ошибка создания товара" }, { status: 500 })
   }
 }
+

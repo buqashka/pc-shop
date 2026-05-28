@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   const categories = await prisma.category.findMany({
     orderBy: { name: "asc" },
@@ -20,3 +22,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Ошибка создания категории" }, { status: 500 })
   }
 }
+
