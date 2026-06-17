@@ -12,6 +12,7 @@ export default function CheckoutPage() {
   const { data: session } = useSession()
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState("")
 
   const [form, setForm] = useState({
     name: "",
@@ -29,13 +30,13 @@ export default function CheckoutPage() {
     const orderData = {
       items: items.map((i) => ({ productId: i.productId, quantity: i.quantity, price: i.price })),
       total: totalPrice,
-      shippingAddress: {
+      shippingAddress: JSON.stringify({
         name: form.name,
         email: form.email,
         phone: form.phone,
         address: form.address,
         comment: form.comment,
-      },
+      }),
       paymentMethod: form.paymentMethod,
     }
 
@@ -49,9 +50,13 @@ export default function CheckoutPage() {
       if (res.ok) {
         clearCart()
         router.push("/account/orders?success=true")
+      } else {
+        const data = await res.json()
+        setError(data.error || "Ошибка при создании заказа")
       }
     } catch (err) {
       console.error(err)
+      setError("Ошибка при создании заказа")
     } finally {
       setSubmitting(false)
     }
@@ -171,6 +176,11 @@ export default function CheckoutPage() {
             <span className="font-semibold">Итого</span>
             <span className="font-bold text-xl">{formatPrice(totalPrice)}</span>
           </div>
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-4">
+              {error}
+            </div>
+          )}
           <button
             type="submit"
             disabled={submitting}
